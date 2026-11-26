@@ -25,6 +25,27 @@ def validar_cpf(cpf):
         raise ValueError("O CPF deve ter 11 números!")
     return cpf
 
+def validar_cpf(cpf):
+    cpf = cpf.replace(".", "").replace("-", "")
+
+    if len(cpf) != 11 or not cpf.isdigit():
+        raise ValueError("O CPF deve ter 11 números!")
+
+    return cpf
+
+
+def validar_telefone(telefone):
+    if len(telefone) != 11 or not telefone.isdigit():
+        raise ValueError("O telefone deve conter 11 números!")
+
+    return telefone
+
+
+def validar_nome(nome):
+    if not nome.replace(" ", "").isalpha():
+        raise ValueError("O nome deve conter apenas letras!")
+
+    return nome
 
 def validar_placa(placa):
     placa = placa.upper().replace("-", "").replace(" ", "")
@@ -54,10 +75,10 @@ def validar_ano(ano):
 def cadastrar_cliente(conexao):
     print("\n===== CADASTRO DE CLIENTES =====")
 
-    nome = input("Nome: ").strip()
+    nome = validar_nome(input("Nome: ").strip())
     cpf = input("CPF: ").strip()
     email = input("Email: ").strip()
-    telefone = input("Telefone: ").strip()
+    telefone = validar_telefone(input("Telefone: ").strip())
 
     if not nome or not cpf or not email or not telefone:
         raise ValueError("Preencha todos os campos!")
