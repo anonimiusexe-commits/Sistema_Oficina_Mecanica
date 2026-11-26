@@ -75,4 +75,4 @@ O projeto foi desenvolvido para aplicar os conhecimentos de programação em Pyt
 
 - Arthur Ricardo
 - Elielton Nascimento
-- Kevyn Emanuel
+- Kevyn Emanoel
