@@ -70,3 +70,9 @@ O relacionamento é de um para muitos (1:N), permitindo que um cliente tenha vá
 ## Objetivo acadêmico
 
 O projeto foi desenvolvido para aplicar os conhecimentos de programação em Python, banco de dados, CRUD, funções, listas, dicionários, tratamento de exceções e controle de versão com Git e GitHub.
+
+## Integrantes da equipe
+
+- Arthur Ricardo
+- Elielton Nascimento
+- Kevyn Emanuel
