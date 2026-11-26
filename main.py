@@ -1,10 +1,19 @@
+# ============================================
+#          IMPORTAÇÃO DE BIBLIOTECAS          
+# ============================================
+
 import os
+from datetime import datetime
 import mysql.connector
 from dotenv import load_dotenv
 
 
 load_dotenv()
 
+
+# ============================================
+#             CONEXÃO COM O MYSQL             
+# ============================================
 
 def conectar():
     configuracao = {
@@ -16,8 +25,10 @@ def conectar():
 
     return mysql.connector.connect(**configuracao)
 
-from datetime import datetime
 
+# ============================================
+#              VALIDAÇÃO DE DADOS             
+# ============================================
 
 def validar_cpf(cpf):
     cpf = cpf.strip().replace(".", "").replace("-", "")
@@ -25,27 +36,18 @@ def validar_cpf(cpf):
         raise ValueError("O CPF deve ter 11 números!")
     return cpf
 
-def validar_cpf(cpf):
-    cpf = cpf.replace(".", "").replace("-", "")
-
-    if len(cpf) != 11 or not cpf.isdigit():
-        raise ValueError("O CPF deve ter 11 números!")
-
-    return cpf
-
 
 def validar_telefone(telefone):
-    if len(telefone) != 11 or not telefone.isdigit():
+    if len(telefone) != 11 or not telefone.isascii() or not telefone.isdigit():
         raise ValueError("O telefone deve conter 11 números!")
-
     return telefone
 
 
 def validar_nome(nome):
     if not nome.replace(" ", "").isalpha():
         raise ValueError("O nome deve conter apenas letras!")
-
     return nome
+
 
 def validar_email(email):
     if email.count("@") != 1 or " " in email:
@@ -60,6 +62,7 @@ def validar_email(email):
         raise ValueError("Email inválido!")
 
     return email
+
 
 def validar_placa(placa):
     placa = placa.upper().replace("-", "").replace(" ", "")
@@ -85,6 +88,10 @@ def validar_ano(ano):
         raise ValueError("Ano inválido!")
 
     return ano
+
+# ============================================
+#               CRUD DE CLIENTES              
+# ============================================
 
 def cadastrar_cliente(conexao):
     print("\n===== CADASTRO DE CLIENTES =====")
@@ -116,7 +123,6 @@ def cadastrar_cliente(conexao):
         cursor.close()
 
 
-
 def consultar_clientes(conexao):
     cursor = conexao.cursor(dictionary=True)
     try:
@@ -140,10 +146,10 @@ def atualizar_cliente(conexao):
         if not cursor.fetchone():
             print("Cliente não encontrado!")
             return
-        nome = input("Novo nome: ").strip()
+        nome = validar_nome(input("Novo nome: ").strip())
         cpf = validar_cpf(input("Novo CPF: "))
-        email = input("Novo email: ").strip()
-        telefone = input("Novo telefone: ").strip()
+        email = validar_email(input("Novo email: ").strip())
+        telefone = validar_telefone(input("Novo telefone: ").strip())
         if not nome or not email or not telefone:
             raise ValueError("Preencha todos os campos!")
         sql = "UPDATE clientes SET nome = %s, cpf = %s, email = %s, telefone = %s WHERE id_clientes = %s"
@@ -175,6 +181,10 @@ def excluir_cliente(conexao):
             print("Exclusão cancelada!")
     finally:
         cursor.close()
+
+# ============================================
+#               CRUD DE VEÍCULOS              
+# ============================================
 
 def cadastrar_veiculo(conexao):
     print("\n===== CADASTRO DE VEÍCULOS =====")
@@ -367,6 +377,10 @@ def excluir_veiculo(conexao):
     finally:
         cursor.close()
 
+# ============================================
+#                MENU PRINCIPAL               
+# ============================================
+
 def executar_menu(conexao):
     while True:
         print("\n===== SISTEMA OFICINA MECÂNICA =====")
@@ -404,9 +418,16 @@ def executar_menu(conexao):
         except ValueError as erro:
             print("Erro de validação:", erro)
         except mysql.connector.Error as erro:
-            print("Erro no MySQL:", erro)
+            if erro.errno == 1062:
+                print("CPF, email, telefone ou placa já cadastrados!")
+            else:
+                print("Erro no MySQL:", erro)
         finally:
             conexao.rollback()
+
+# ============================================
+#           INICIALIZAÇÃO DO SISTEMA          
+# ============================================
 
 def main():
     conexao = None
