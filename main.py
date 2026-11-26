@@ -47,6 +47,20 @@ def validar_nome(nome):
 
     return nome
 
+def validar_email(email):
+    if email.count("@") != 1 or " " in email:
+        raise ValueError("Email inválido!")
+
+    usuario, dominio = email.split("@")
+
+    if not usuario or "." not in dominio:
+        raise ValueError("Email inválido!")
+
+    if dominio.startswith(".") or dominio.endswith("."):
+        raise ValueError("Email inválido!")
+
+    return email
+
 def validar_placa(placa):
     placa = placa.upper().replace("-", "").replace(" ", "")
     if len(placa) != 7 or not placa.isascii():
@@ -77,7 +91,7 @@ def cadastrar_cliente(conexao):
 
     nome = validar_nome(input("Nome: ").strip())
     cpf = input("CPF: ").strip()
-    email = input("Email: ").strip()
+    email = validar_email(input("Email: ").strip())
     telefone = validar_telefone(input("Telefone: ").strip())
 
     if not nome or not cpf or not email or not telefone:
