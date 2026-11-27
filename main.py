@@ -136,10 +136,10 @@ def atualizar_cliente(conexao):
         if not cursor.fetchone():
             print("Cliente não encontrado!")
             return
-        nome = validar_nome(input("Novo nome: ").strip())
-        cpf = validar_cpf(input("Novo CPF: "))
-        email = validar_email(input("Novo email: ").strip())
-        telefone = validar_telefone(input("Novo telefone: ").strip())
+        nome = validar_nome(input("Informe novo nome: ").strip())
+        cpf = validar_cpf(input("Informe novo CPF: "))
+        email = validar_email(input("Informe novo email: ").strip())
+        telefone = validar_telefone(input("Informe novo telefone: ").strip())
         if not nome or not email or not telefone:
             raise ValueError("Preencha todos os campos!")
         sql = "UPDATE clientes SET nome = %s, cpf = %s, email = %s, telefone = %s WHERE id_clientes = %s"
